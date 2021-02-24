@@ -3,6 +3,8 @@ package kr.jhb.androidfcmpushsample;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -43,10 +45,17 @@ public class MainActivity extends AppCompatActivity {
                     String token = task.getResult().getToken();
 
                     // SharedPreference와 비교
+                    SharedPreferences pref = getApplicationContext().
+                        getSharedPreferences("fcm", Context.MODE_PRIVATE);
+                    String prevToken = pref.getString("token", "n/a");
 
+                    // 같을 경우 토큰값 출력하고 이대로 종료
+                    if (prevToken.equals(token)) {
+                        Log.d(TAG, "CurrentToken:" + token);
+                        return;
+                    }
 
                     // 같지 않을 경우
-
 
                     // 서버에 토큰 등록 // 등록 실패 시 리트라이
                     final String url = "";
@@ -67,10 +76,10 @@ public class MainActivity extends AppCompatActivity {
                     );
 
                     // 등록 성공시 SharedPreference에 업데이트
-
+                    pref.edit().putString("token", token).commit();
                     // Log and toast
 
-                    Log.d(TAG, "CurrentToken:" + token);
+                    Log.d(TAG, "NewToken:" + token);
                     Toast.makeText(MainActivity.this, token, Toast.LENGTH_SHORT).show();
                 }
             });
