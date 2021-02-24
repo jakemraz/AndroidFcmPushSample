@@ -142,6 +142,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         .setSmallIcon(R.mipmap.ic_launcher)
                         .setContentTitle("AndroidFcmPushSample")
                         .setContentText(messageBody)
+                        .setPriority(NotificationCompat.PRIORITY_HIGH)
                         //.setAutoCancel(true)
                         //.setSound(defaultSoundUri)
                         .setContentIntent(pendingIntent);
@@ -153,8 +154,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(channelId,
                     CHANNEL_ID,
-                    NotificationManager.IMPORTANCE_DEFAULT);
+                    NotificationManager.IMPORTANCE_HIGH);
             notificationManager.createNotificationChannel(channel);
+            Log.v(TAG, "create channel");
         }
 
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
